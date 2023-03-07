@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+    command: sh -c "rm -f tmp/pids/server.pid && ./bin/rails server -b 0.0.0.0 -p 3000"
+    image: shop:latest
+    container_name: shop_app
+    volumes:
+      - .:/app:cached
+      - rails_bundle:/usr/local/bundle:delegated
+    environment:
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - REDIS_URL=${REDIS_URL:-redis://cache:6379/0/development}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - cache
+    tty: true
+  cache:
+    image: redis:alpine
+    container_name: shop_redis
+    command: ["redis-server","--appendonly","yes"]
+    volumes:
+      - redis_data:/data:delegated
+  mailcatcher:
+    container_name: shop_mailcatcher
+    restart: on-failure
+    image: dockage/mailcatcher:latest
+    ports:
+    - "1080:1080"
+    - "1025:1025"
+volumes:
+  rails_bundle:
+  redis_data:

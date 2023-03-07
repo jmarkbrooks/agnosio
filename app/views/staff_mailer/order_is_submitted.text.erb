@@ -1,0 +1,10 @@
+Order <%= @order.id %> has been submitted for Customer <%= @customer.name %> at <%= @customer.email %>.
+
+The order consists of the following <%= @order.item.count %> items:
+
+<% @order.item.each do |order_item| %>
+<%= order_item.name %>
+<% end %>
+with a total price of <%= number_to_currency(@order.total / 100.to_d) %>
+
+Please notify the customer as soon as the order is ready for pickup.
