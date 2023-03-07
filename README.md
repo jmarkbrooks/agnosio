@@ -23,6 +23,7 @@ This has been designed to be run locally using Docker.  It can be run in other w
 * Install Docker if necessary.
 * Clone the repository and change into the local repository directory.
 * `docker compose build` -- this will build the local app container
+* `docker compose run --rm -it app bundle install` -- this will set up the bundle for local development since there's a shared mount
 * `docker compose run --rm -it app ./bin/rails db:setup` will set up the database and seed it.
 * `docker compose up` -- this will start the application stack.
 * Install Postman for Desktop if needed.
