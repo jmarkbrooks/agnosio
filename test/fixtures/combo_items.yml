@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  combo_price: MyString
+  item_id: one
+  combo_id: one
+
+two:
+  combo_price: MyString
+  item_id: two
+  combo_id: two

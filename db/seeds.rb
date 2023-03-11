@@ -10,72 +10,110 @@ Customer.create!([
 p "Second, create some sample Items..."
 
 Item.create!([
-  { name: "Small soda", price: 100, discount: 0, tax_rate: 6 },
-  { name: "Medium soda", price: 200, discount: 50, tax_rate: 6 },
-  { name: "Large soda", price: 300, discount: 100, tax_rate: 6 },
-  { name: "Hamburger", price: 350, discount: 50, tax_rate: 6 },
-  { name: "French fries", price: 100, discount: 0, tax_rate: 6 },
-  { name: "Braised snails", price: 1000, discount: 0, tax_rate: 10 },
-  { name: "Rat on a stick", price: 500, discount: 100, tax_rate: 6 },
-  { name: "Magic beans", price: 200, discount: 0, tax_rate: 20 }
+  { name: "Coffee", price: 200, tax_rate: 6 },
+  { name: "Pepsi", price: 200, tax_rate: 6 },
+  { name: "Sandwich", price: 400, tax_rate: 6 },
+  { name: "Small soda", price: 100, tax_rate: 6 },
+  { name: "Medium soda", price: 200, tax_rate: 6 },
+  { name: "Large soda", price: 300, tax_rate: 6 },
+  { name: "Burger", price: 350, tax_rate: 6 },
+  { name: "French fries", price: 100, tax_rate: 6 },
+  { name: "Braised snails", price: 1000, tax_rate: 10 },
+  { name: "Rat on a stick", price: 500, tax_rate: 6 },
+  { name: "Magic beans", price: 200, tax_rate: 20 }
 ])
 
-it1 = Item.find_by(name: "Small soda")
-it2 = Item.find_by(name: "Medium soda")
-it3 = Item.find_by(name: "Large soda")
-it4 = Item.find_by(name: "Hamburger")
-it5 = Item.find_by(name: "French fries")
-it6 = Item.find_by(name: "Braised snails")
-it7 = Item.find_by(name: "Rat on a stick")
-it8 = Item.find_by(name: "Magic beans")
+it1  =  Item.find_by(name: "Small soda")
+it2  =  Item.find_by(name: "Medium soda")
+it3  =  Item.find_by(name: "Large soda")
+it4  =  Item.find_by(name: "Burger")
+it5  =  Item.find_by(name: "French fries")
+it6  =  Item.find_by(name: "Braised snails")
+it7  =  Item.find_by(name: "Rat on a stick")
+it8  =  Item.find_by(name: "Magic beans")
+it9  =  Item.find_by(name: "Coffee")
+it10 =  Item.find_by(name: "Pepsi")
+it11 =  Item.find_by(name: "Sandwich")
+
+# change set 1
+# Let's create some Combos
+com1 = Combo.create!(name: "Coffee + Burger")
+ComboItem.create!(combo: com1, item: it9, combo_price: 180)
+ComboItem.create!(combo: com1, item: it4, combo_price: 298)
+com2 = Combo.create!(name: "Pepsi + Burger")
+ComboItem.create!(combo: com2, item: it10, combo_price: 180)
+ComboItem.create!(combo: com2, item: it4, combo_price: 298)
+com3 = Combo.create!(name: "Coffee + Sandwich + Pepsi")
+ComboItem.create!(combo: com3, item: it9, combo_price: 180)
+ComboItem.create!(combo: com3, item: it11, combo_price: 340)
+ComboItem.create!(combo: com3, item: it10, combo_price: 170)
 
 p "Finally, create some existing Orders for the sample Customers consisting of the sample Items."
 
 c1 = Customer.find_by(email: "mark.brooks@example.com")
 
-order = Order.new(submit: true, ready: true, complete: false)
+order = Order.create!(customer: c1, submit: true, ready: true, complete: false)
 order.item << it1
 order.item << it4
 order.item << it5
-c1.order << order
 
-order = Order.new(submit:true, ready: true, complete: true)
+order = Order.create!(customer: c1, submit:true, ready: true, complete: true)
 order.item << it3
 order.item << it6
-c1.order << order
+
+# Coffee + Burger combo
+order = Order.create!(customer: c1, submit:true, ready: true, complete: true)
+order.combo << com1
+order.item << it4
 
 c2 = Customer.find_by(email: "mbrando@xyz.abc")
 
-order = Order.new(submit: true, ready: true, complete: false)
+order = Order.create!(customer: c2, submit: true, ready: true, complete: false)
 order.item << it2
 order.item << it5
 order.item << it7
-c2.order << order
 
-order = Order.new(submit: true, ready: true, complete: true)
+order = Order.create!(customer: c2, submit: true, ready: true, complete: true)
 order.item << it3
 order.item << it4
 order.item << it5
-c2.order << order
+
+# Pepsi + Burger combo
+order = Order.create!(customer: c2, submit: true, ready: true, complete: true)
+order.combo << com2
 
 c3 = Customer.find_by(email: "abcefg@lmnop.qrs")
 
-order = Order.new(submit: true, ready: true, complete: false)
+order = Order.create!(customer: c3, submit: true, ready: true, complete: false)
 order.item << it1
 order.item << it4
 order.item << it5
-c3.order << order
+
+# Coffee + sandwich + Pepsi combo 
+order = Order.create!(customer: c3, submit: true, ready: true, complete: false)
+order.combo << com3
+order.item << it5
 
 c4 = Customer.find_by(email: "dancing@hampsters.com")
 
-order = Order.new(submit: true, ready: false, complete: false)
+order = Order.create(customer: c4, submit: true, ready: false, complete: false)
 order.item << it8
-c4.order << order
+
+# Coffee + sandwich + Pepsi combo + non-combo item French Fries
+order = Order.create(customer: c4, submit: true, ready: true, complete: false)
+order.combo << com3
+order.item  << it5
 
 c5 = Customer.find_by(email: "us_president@whitehouse.com")
 
-order = Order.new(submit: true, ready: false, complete: false)
+order = Order.create(customer: c5, submit: true, ready: false, complete: false)
 order.item << it1
-c5.order << order
+
+# 1 Coffee + Burger combo, 2 Pepsi + Burger combos, + 1 rat on a stick non-combo item
+order = Order.create(customer: c5, submit: true, ready: false, complete: false)
+order.combo << com1
+order.combo << com2
+order.combo << com2
+order.item  << it7
 
 p "And we are done seeding."

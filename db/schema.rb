@@ -10,7 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_06_202823) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_11_010648) do
+  create_table "combo_items", force: :cascade do |t|
+    t.integer "combo_price"
+    t.integer "item_id", null: false
+    t.integer "combo_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["combo_id"], name: "index_combo_items_on_combo_id"
+    t.index ["item_id"], name: "index_combo_items_on_item_id"
+  end
+
+  create_table "combos", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "combos_orders", id: false, force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "combo_id", null: false
+    t.index ["combo_id", "order_id"], name: "index_combos_orders_on_combo_id_and_order_id"
+    t.index ["order_id", "combo_id"], name: "index_combos_orders_on_order_id_and_combo_id"
+  end
+
   create_table "customers", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -21,7 +44,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_202823) do
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.integer "price"
-    t.integer "discount"
     t.integer "tax_rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -44,5 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_202823) do
     t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
+  add_foreign_key "combo_items", "combos"
+  add_foreign_key "combo_items", "items"
   add_foreign_key "orders", "customers"
 end

@@ -16,6 +16,15 @@ Please send the link with the assessment as soon as you finish it
 
 Notes: Since neither UI nor unit testing was mandatory, to save time this has not been done.
 
+## Change Set 1
+
+Further requirements were added after the original problem solution was provided.  Specifically:
+
+Coffee + Burger - 10% off on coffee and 15% off on Burger
+Pepsi + Burger - 15% off on Pepsi and 15% off on Burger
+Coffee + Sandwich + Pepsi - 10% off on coffee, 15% off on Burger, 10% on Pepsi
+Design the application which can have multiple combos and discount on each item in the combo
+
 ## Instructions
 
 This has been designed to be run locally using Docker.  It can be run in other ways as well, but the instructions will assume you are using Docker Desktop or similar Docker installation to to run the application locally.
@@ -29,9 +38,9 @@ This has been designed to be run locally using Docker.  It can be run in other w
 * Install Postman for Desktop if needed.
 * Import the Postman suite included into Postman.
 * The Postman test suite should include all the necessary steps 1 through 6.
-* Step 1 will show the list of items.
-* Step 2 creates a sample order.
-* Step 3 adds 3 items to the order.
+* Step 1 will show the list of items and their combos together with combo prices.
+* Step 2 creates a sample order, inclusive of non-combo items and combos.
+* Step 3 adds 2 items to the order and 2 combos.
 * Step 4 submits the order.  When the order is submitted, browsing to https://localhost:1080 should open the Mailcatcher window and you can see a staff notification email.
 * Step 5 marks the order as ready for pickup.  Again, there should be an email, this time notifying the client.
 * Step 6 marks the order as complete, representing the pickup/delivery and payment of the order.

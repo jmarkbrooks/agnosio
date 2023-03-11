@@ -25,14 +25,21 @@ class Api::V1::OrdersController < ApplicationController
 
   def add_item
     logger.info params.inspect
-    item_ids = params[:order][:items]
+    item_ids = params[:order][:items] || []
     items=item_ids.collect do |item_id|
       item = Item.find(item_id)
       render json: { error: "Item not found" }, status: :not_found and return unless item.present?
       item
     end
     @order.item << items
-    render json: @order, include: :item, methods: :total
+    combo_ids = params[:order][:combos] || []
+    combos=combo_ids.collect do |combo_id|
+      combo = Combo.find(combo_id)
+      render json: { error: "Combo not found" }, status: :not_found and return unless combo.present?
+      combo
+    end
+    @order.combo << combos
+    render json: @order, include: [:item, :combo], methods: :total
   end
 
   def destroy
@@ -43,8 +50,6 @@ class Api::V1::OrdersController < ApplicationController
   private
 
   def order_params(*args)
-    logger.info "args: #{args}"
-    logger.info params.inspect
     params.require(:order).permit(*args)
   end
 
