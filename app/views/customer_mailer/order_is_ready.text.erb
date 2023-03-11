@@ -1,10 +1,19 @@
 Dear <%= @customer.name %>,
 
-Your order, Order #<%= @order.id %>, is ready for pickup and payment.  It includes the following items:
+Your order, Order #<%= @order.id %>, is ready for pickup and payment.  It includes the following items and combos:
 
+<%= "Items:" if @order.item.present? %>
 <% @order.item.each do |order_item| %>
 <%= order_item.name %>
-<% end %>
+<% end if @order.item.present? %>
+
+<%= "Combinations:" if @order.combo.present? %>
+<% @order.combo.each do |combo| %>
+<%= "Combo name: " + combo.name %>
+<%  combo.combo_items.each do | combo_item | %>
+<%=    combo_item.item.name %>
+<%  end %>
+<% end if @order.combo.present? %>
 as a total price, including all discounts and taxes, of <%= number_to_currency(@order.total / 100.to_d) %>.
 
 Thanks for giving us the chance to serve you!

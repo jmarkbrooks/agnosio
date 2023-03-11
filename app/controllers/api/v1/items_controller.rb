@@ -4,7 +4,7 @@ class Api::V1::ItemsController < ApplicationController
 def index
     @items = Item.all
     render json: { error: "There are no items" }, status: :not_found and return unless @items.present?
-    render json: @items
+    render json: @items, include: [combos: { include: :combo_items }]
   end
 
   def show

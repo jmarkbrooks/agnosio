@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "STEP 1: Get the list of items.",
+			"name": "STEP 1: Get the list of items including their combo options.",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -29,7 +29,7 @@
 			"response": []
 		},
 		{
-			"name": "STEP 2: User creates an order",
+			"name": "STEP 2: User creates an order including combos and non-combo items.",
 			"request": {
 				"method": "POST",
 				"header": [],

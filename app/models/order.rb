@@ -1,24 +1,33 @@
 class Order < ApplicationRecord
   has_and_belongs_to_many :item
   belongs_to :customer
+  has_and_belongs_to_many :combo
   after_update :notify_staff, if: :order_is_submitted?
   after_update :notify_customer, if: :order_is_ready?
 
   def total
-    before_roundup = self.item.reduce(0.0) do |sum, line|
-      if self.item.count > 1
-        base = line.price - line.discount
-      else
-        base = line.price
-      end
-      tax = base * (line.tax_rate.to_f/100)
-      subtotal = base + tax
-      sum + subtotal         
-    end 
-    before_roundup.ceil
+    item_total(self.item) + combos_total
   end
 
   private
+
+  def item_total(items)
+    before_roundup = items.reduce(0.0) do |sum, line|
+      base = defined?(line.price) ? line.price : line.combo_price
+      rate = defined?(line.tax_rate) ? line.tax_rate : line.item.tax_rate
+      tax = base * (rate.to_f/100)
+      subtotal = base + tax
+      sum + subtotal         
+    end
+    before_roundup.ceil
+  end
+
+  def combos_total
+    before_roundup = self.combo.reduce(0.0) do |combos_sum, combo|
+      combos_sum + item_total(combo.combo_items)      
+    end
+    before_roundup.ceil
+  end
 
   def notify_customer
     logger.info "Ready for pickup email sent to customer!"
